@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://ec2-54-227-246-76.compute-1.amazonaws.com:5432/ddd84ubu1vqdp5
+    username: sbpwpplaymjham
+    password: 987cd9a9d2d25d3bc559450cc69062514eca830c334fac2145ce4a669c6bbe3b
