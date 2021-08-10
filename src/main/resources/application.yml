@@ -15,3 +15,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+auth:
+  secret: techgeeknext
+  access-token-validity-seconds: 86400
+  password: $2y$12$b/x0/uHFb01t5y4Dx9T7KOQo1mjAXXYsGhbE.by3fb1OYywvW3q72
