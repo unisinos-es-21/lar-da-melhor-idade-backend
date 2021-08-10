@@ -2,9 +2,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-      naming:
-        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    change-log: classpath:liquibase/master.xml
+auth:
+  secret: techgeeknext
+  access-token-validity-seconds: 86400
