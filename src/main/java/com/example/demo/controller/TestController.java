@@ -13,7 +13,7 @@ public class TestController {
 
     @GetMapping(value = "/hello", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public String findOne() {
+    public String testPermitAll() {
         return "Hello test message";
     }
 
