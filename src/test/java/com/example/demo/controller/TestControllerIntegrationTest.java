@@ -4,6 +4,7 @@ import com.example.demo.AbstractIntegrationTest;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,6 +24,7 @@ class TestControllerIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @DisplayName("Deve retornar mensagem de teste")
     @WithMockUser(username = "samuel", authorities = {"ADMIN"})
     void successTest() throws Exception {
         this.userRepository.save(UserEntity.builder()
