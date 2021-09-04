@@ -21,21 +21,24 @@ class TestControllerIntegrationTest extends AbstractIntegrationTest {
     public void doBefore() {
         super.doBefore();
         this.userRepository.deleteAll();
+        this.createAndSaveUserToLogin();
     }
 
-    @Test
-    @DisplayName("Deve retornar mensagem de teste")
-    @WithMockUser(username = "samuel", authorities = {"ADMIN"})
-    void successTest() throws Exception {
+    public void createAndSaveUserToLogin() {
         this.userRepository.save(UserEntity.builder()
-                .username("samuel")
-                .password(new BCryptPasswordEncoder().encode("123"))
+                .username("user1")
+                .password(new BCryptPasswordEncoder().encode("blahblahblah"))
                 .accountNonExpired(true)
                 .accountNonLocked(true)
                 .credentialsNonExpired(true)
                 .enabled(true)
                 .build());
+    }
 
+    @Test
+    @DisplayName("Deve retornar mensagem de teste")
+    @WithMockUser(username = "user1", authorities = {"ADMIN"})
+    void successTest() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/test/hello"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").value("Hello test message"));
