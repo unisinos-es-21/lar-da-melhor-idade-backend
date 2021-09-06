@@ -37,7 +37,7 @@ class AuthControllerIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @DisplayName("Cenário 1 - Login com sucesso 200")
+    @DisplayName("Cenário 1 - Login com sucesso retorna status 200")
     void loginSuccess() throws Exception {
         AuthenticateRequest authenticateRequest = AuthenticateRequest.builder()
                 .username("user1")
@@ -52,7 +52,7 @@ class AuthControllerIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @DisplayName("Cenário 2 - Login sem sucesso dados inválidos erro 401")
+    @DisplayName("Cenário 2 - Login sem sucesso retorna status 401")
     void loginUnauthorized() throws Exception {
         AuthenticateRequest authenticateRequest = AuthenticateRequest.builder()
                 .username("user2")
