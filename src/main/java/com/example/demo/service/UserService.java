@@ -2,8 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.configuration.AuditorAwareImpl;
 import com.example.demo.entity.UserEntity;
-import com.example.demo.exception.BadCredentialsException;
-import com.example.demo.exception.GenericException;
+import com.example.demo.exception.ForbiddenException;
+import com.example.demo.exception.UsernameDuplicatedException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.request.AddUserRequest;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class UserService {
     public UserEntity createUser(AddUserRequest addUserRequest) {
         boolean existUsername = this.userRepository.existsByUsername(addUserRequest.getUsername());
         if (existUsername) {
-            throw new GenericException("O usuário informado já existe");
+            throw new UsernameDuplicatedException(addUserRequest.getUsername());
         }
         return create(addUserRequest.getUsername(), addUserRequest.getPassword());
     }
@@ -39,13 +39,13 @@ public class UserService {
 
     private UserEntity save(UserEntity userEntity) {
         if (userEntity.getUsername().equalsIgnoreCase(AuditorAwareImpl.ANONYMOUS_USER)) {
-            throw new BadCredentialsException();
+            throw new ForbiddenException();
         }
         boolean existUsername = Objects.isNull(userEntity.getId()) ?
                 this.userRepository.existsByUsername(userEntity.getUsername()) :
                 this.userRepository.existsByUsernameAndIdNot(userEntity.getUsername(), userEntity.getId());
         if (existUsername) {
-            throw new BadCredentialsException();
+            throw new UsernameDuplicatedException(userEntity.getUsername());
         }
         return this.userRepository.save(userEntity);
     }

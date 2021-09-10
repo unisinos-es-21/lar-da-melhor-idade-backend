@@ -2,13 +2,16 @@ package com.example.demo.controller;
 
 import com.example.demo.AbstractIntegrationTest;
 import com.example.demo.entity.UserEntity;
+import com.example.demo.exception.CpfDuplicatedException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.request.AuthenticateRequest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -37,7 +40,7 @@ class AuthControllerIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @DisplayName("Cenário 1 - Login com sucesso retorna status 200")
+    @DisplayName("Cenário 1 - Login com sucesso")
     void loginSuccess() throws Exception {
         AuthenticateRequest authenticateRequest = AuthenticateRequest.builder()
                 .username("user1")
@@ -52,7 +55,7 @@ class AuthControllerIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @DisplayName("Cenário 2 - Login sem sucesso retorna status 401")
+    @DisplayName("Cenário 2 - Login sem sucesso")
     void loginUnauthorized() throws Exception {
         AuthenticateRequest authenticateRequest = AuthenticateRequest.builder()
                 .username("user2")
@@ -61,7 +64,12 @@ class AuthControllerIntegrationTest extends AbstractIntegrationTest {
         this.mockMvc.perform(MockMvcRequestBuilders.post("/auth/authenticate")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(this.objectMapper.writeValueAsString(authenticateRequest)))
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized())
+                .andExpect(result -> {
+                    Assertions.assertTrue(result.getResolvedException() instanceof InternalAuthenticationServiceException);
+                    InternalAuthenticationServiceException exception = (InternalAuthenticationServiceException) result.getResolvedException();
+                    Assertions.assertEquals("401 UNAUTHORIZED \"Credenciais inválidas\"", exception.getMessage());
+                });
     }
 
 }

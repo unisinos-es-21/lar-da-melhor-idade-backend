@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.UserEntity;
-import com.example.demo.exception.UsernameNotFoundException;
+import com.example.demo.exception.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,7 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) {
         UserEntity userEntity = this.userService.findOneByUsername(username);
         if (userEntity == null) {
-            throw new UsernameNotFoundException();
+            throw new UnauthorizedException();
         }
 
         List<GrantedAuthority> grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority("ADMIN"));

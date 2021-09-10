@@ -5,6 +5,7 @@ import com.example.demo.entity.InstitutionalizedEntity;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.enumerator.GenderEnum;
 import com.example.demo.exception.CpfDuplicatedException;
+import com.example.demo.exception.RecordsNotFoundException;
 import com.example.demo.repository.InstitutionalizedRepository;
 import com.example.demo.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -49,7 +50,7 @@ class InstitutionalizedControllerIntegrationTest extends AbstractIntegrationTest
     }
 
     @Test
-    @DisplayName("Cenário 3 - Cadastro de institucionalizado com sucesso")
+    @DisplayName("Cenário 1 - Cadastro de institucionalizado com sucesso")
     @WithMockUser(username = "user1", authorities = {"ADMIN"})
     void successOnCreateInstitutionalized() throws Exception {
         Assertions.assertEquals(0, institutionalizedRepository.findAll().size());
@@ -76,15 +77,20 @@ class InstitutionalizedControllerIntegrationTest extends AbstractIntegrationTest
     }
 
     @Test
-    @DisplayName("Cenário 4 - Nenhum registro de institucionalizado encontrado")
+    @DisplayName("Cenário 2 - Nenhum registro de institucionalizado encontrado")
     @WithMockUser(username = "user1", authorities = {"ADMIN"})
     void mustReturnNotFoundWhenInstitutionalizedIsEmpty() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/institutionalized"))
-                .andExpect(MockMvcResultMatchers.status().isNotFound());
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(result -> {
+                    Assertions.assertTrue(result.getResolvedException() instanceof RecordsNotFoundException);
+                    RecordsNotFoundException exception = (RecordsNotFoundException) result.getResolvedException();
+                    Assertions.assertEquals("Nenhum registro encontrado", exception.getReason());
+                });
     }
 
     @Test
-    @DisplayName("Cenário 5 - CPF duplicado")
+    @DisplayName("Cenário 3 - CPF duplicado")
     @WithMockUser(username = "user1", authorities = {"ADMIN"})
     void cpfDuplicatedMustReturnConflict() throws Exception {
         Assertions.assertEquals(0, institutionalizedRepository.findAll().size());
