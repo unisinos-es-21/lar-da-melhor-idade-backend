@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.AbstractIntegrationTest;
 import com.example.demo.entity.UserEntity;
-import com.example.demo.exception.CpfDuplicatedException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.request.AuthenticateRequest;
 import org.junit.jupiter.api.Assertions;
