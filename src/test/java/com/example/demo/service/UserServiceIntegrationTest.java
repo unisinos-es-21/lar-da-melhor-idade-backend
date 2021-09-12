@@ -22,6 +22,7 @@ class UserServiceIntegrationTest extends AbstractIntegrationTest {
     @Test
     @DisplayName("Deve salvar usuário no banco")
     void mustSaveUserInDB() {
+        userRepository.deleteAll();
         Assertions.assertEquals(0, userRepository.findAll().size());
 
         UserEntity userReturned = userService.create("user", "blahblahblah");

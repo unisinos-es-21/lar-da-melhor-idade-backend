@@ -2,19 +2,16 @@ package com.example.demo.controller;
 
 import com.example.demo.AbstractIntegrationTest;
 import com.example.demo.entity.InstitutionalizedEntity;
-import com.example.demo.entity.UserEntity;
 import com.example.demo.enumerator.GenderEnum;
 import com.example.demo.exception.CpfDuplicatedException;
 import com.example.demo.exception.RecordsNotFoundException;
 import com.example.demo.repository.InstitutionalizedRepository;
-import com.example.demo.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -25,28 +22,13 @@ import java.util.List;
 class InstitutionalizedControllerIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private InstitutionalizedRepository institutionalizedRepository;
 
+    //Pré condição
     @BeforeEach
     public void doBefore() {
         super.doBefore();
-        this.userRepository.deleteAll();
-        this.createAndSaveUserToLogin();
         this.institutionalizedRepository.deleteAll();
-    }
-
-    public void createAndSaveUserToLogin() {
-        this.userRepository.save(UserEntity.builder()
-                .username("user1")
-                .password(new BCryptPasswordEncoder().encode("blahblahblah"))
-                .accountNonExpired(true)
-                .accountNonLocked(true)
-                .credentialsNonExpired(true)
-                .enabled(true)
-                .build());
     }
 
     @Test
@@ -93,6 +75,7 @@ class InstitutionalizedControllerIntegrationTest extends AbstractIntegrationTest
     @DisplayName("Cenário 3 - CPF duplicado")
     @WithMockUser(username = "user1", authorities = {"ADMIN"})
     void cpfDuplicatedMustReturnConflict() throws Exception {
+        //Pré condição
         Assertions.assertEquals(0, institutionalizedRepository.findAll().size());
 
         institutionalizedRepository.save(InstitutionalizedEntity.builder()
@@ -109,6 +92,7 @@ class InstitutionalizedControllerIntegrationTest extends AbstractIntegrationTest
         Assertions.assertEquals("José da Silva", institutionalizedInDBBefore.get(0).getName());
         Assertions.assertEquals("12345678910", institutionalizedInDBBefore.get(0).getCpf());
 
+        //Teste
         mockMvc.perform(MockMvcRequestBuilders.post("/institutionalized")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(this.objectMapper.writeValueAsString(InstitutionalizedEntity.builder()
@@ -125,6 +109,7 @@ class InstitutionalizedControllerIntegrationTest extends AbstractIntegrationTest
                     Assertions.assertEquals("CPF 12345678910 já cadastrado", cpfDuplicatedException.getReason());
                 });
 
+        //Pós condição
         List<InstitutionalizedEntity> institutionalizedInDBAfter = institutionalizedRepository.findAll();
         Assertions.assertEquals(1, institutionalizedInDBAfter.size());
         Assertions.assertNotNull(institutionalizedInDBAfter.get(0).getId());
