@@ -30,7 +30,6 @@ public abstract class AbstractIntegrationTest {
     @Autowired
     protected UserRepository userRepository;
 
-    //Pré condição
     @BeforeEach
     public void doBefore() {
         this.objectMapper = new ObjectMapper();

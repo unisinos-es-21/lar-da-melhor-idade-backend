@@ -5,9 +5,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 public class CreateEntityIdNotNullException extends ResponseStatusException {
 
-    private static final String PARA_INSERIR_UM_REGISTRO_NAO_PODE_SER_INFORMADO_UM_ID = "Para inserir um registro não pode ser informado um ID";
+    public static final String CREATE_ENTITY_ID_NOT_NULL_EXCEPTION_MESSAGE = "Para inserir um registro não pode ser informado um ID";
 
     public CreateEntityIdNotNullException() {
-        super(HttpStatus.BAD_REQUEST, PARA_INSERIR_UM_REGISTRO_NAO_PODE_SER_INFORMADO_UM_ID);
+        super(HttpStatus.BAD_REQUEST, CREATE_ENTITY_ID_NOT_NULL_EXCEPTION_MESSAGE);
     }
 }

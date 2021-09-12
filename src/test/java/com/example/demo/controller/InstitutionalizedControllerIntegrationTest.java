@@ -24,7 +24,6 @@ class InstitutionalizedControllerIntegrationTest extends AbstractIntegrationTest
     @Autowired
     private InstitutionalizedRepository institutionalizedRepository;
 
-    //Pré condição
     @BeforeEach
     public void doBefore() {
         super.doBefore();
@@ -75,7 +74,6 @@ class InstitutionalizedControllerIntegrationTest extends AbstractIntegrationTest
     @DisplayName("Cenário 3 - CPF duplicado")
     @WithMockUser(username = "user1", authorities = {"ADMIN"})
     void cpfDuplicatedMustReturnConflict() throws Exception {
-        //Pré condição
         Assertions.assertEquals(0, institutionalizedRepository.findAll().size());
 
         institutionalizedRepository.save(InstitutionalizedEntity.builder()
@@ -109,7 +107,6 @@ class InstitutionalizedControllerIntegrationTest extends AbstractIntegrationTest
                     Assertions.assertEquals("CPF 12345678910 já cadastrado", cpfDuplicatedException.getReason());
                 });
 
-        //Pós condição
         List<InstitutionalizedEntity> institutionalizedInDBAfter = institutionalizedRepository.findAll();
         Assertions.assertEquals(1, institutionalizedInDBAfter.size());
         Assertions.assertNotNull(institutionalizedInDBAfter.get(0).getId());
