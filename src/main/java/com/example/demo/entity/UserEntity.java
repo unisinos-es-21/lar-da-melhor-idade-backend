@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity extends AbstractEntity {
+public class UserEntity extends BasicEntity {
 
     @NotNull
     @Column(name = "account_non_expired", nullable = false)

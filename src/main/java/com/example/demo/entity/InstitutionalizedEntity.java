@@ -22,7 +22,7 @@ import java.time.LocalDate;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InstitutionalizedEntity extends AbstractEntity {
+public class InstitutionalizedEntity extends BasicEntity {
 
     @NotNull
     @Column(length = 100, unique = true, nullable = false)
