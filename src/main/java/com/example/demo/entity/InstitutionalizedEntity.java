@@ -25,7 +25,7 @@ import java.time.LocalDate;
 public class InstitutionalizedEntity extends BasicEntity {
 
     @NotNull
-    @Column(length = 100, unique = true, nullable = false)
+    @Column(length = 100, nullable = false)
     private String name;
 
     @NotNull

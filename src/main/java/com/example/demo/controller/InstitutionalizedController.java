@@ -35,4 +35,16 @@ public class InstitutionalizedController {
         return institutionalizedService.create(institutionalized);
     }
 
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public InstitutionalizedEntity update(@PathVariable Long id, @Valid @RequestBody InstitutionalizedEntity institutionalized) {
+        return institutionalizedService.update(id, institutionalized);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable Long id) {
+        institutionalizedService.delete(id);
+    }
+
 }

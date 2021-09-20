@@ -1,8 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.InstitutionalizedEntity;
-import com.example.demo.exception.CpfDuplicatedException;
-import com.example.demo.exception.CreateEntityIdNotNullException;
+import com.example.demo.exception.*;
 import com.example.demo.repository.InstitutionalizedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,4 +28,25 @@ public class InstitutionalizedService {
         }
         return institutionalizedRepository.save(institutionalized);
     }
+
+    public InstitutionalizedEntity update(Long id, InstitutionalizedEntity institutionalized) {
+        if (Objects.isNull(institutionalized.getId())) {
+            throw new UpdateEntityIdNullException();
+        }
+        if (institutionalizedRepository.existsById(institutionalized.getId())) {
+            throw new RecordsNotFoundException(institutionalized.getId());
+        }
+        if (!id.equals(institutionalized.getId())) {
+            throw new DifferentIDException();
+        }
+        return institutionalizedRepository.save(institutionalized);
+    }
+
+    public void delete(Long id) {
+        if (institutionalizedRepository.existsById(id)) {
+            throw new RecordsNotFoundException(id);
+        }
+        institutionalizedRepository.deleteById(id);
+    }
+
 }
