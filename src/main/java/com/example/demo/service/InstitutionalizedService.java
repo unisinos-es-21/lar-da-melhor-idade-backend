@@ -5,9 +5,10 @@ import com.example.demo.entity.QInstitutionalizedEntity;
 import com.example.demo.enumerator.GenderEnum;
 import com.example.demo.exception.*;
 import com.example.demo.repository.InstitutionalizedRepository;
-import com.example.demo.util.TupleUtil;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -15,11 +16,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,24 +35,29 @@ public class InstitutionalizedService {
     @PersistenceContext
     private EntityManager entityManager;
 
+    public static List<InstitutionalizedEntity> fetchQuery(Pageable pageable, JPAQuery<InstitutionalizedEntity> query, PathBuilder<?> entityPath) {
+        List<OrderSpecifier<?>> orderSpecifiers = getOrderSpecifiers(entityPath, pageable.getSort());
+        orderSpecifiers.forEach(query::orderBy);
+        query.offset(pageable.getOffset());
+        query.limit(pageable.getPageSize());
+        return query.fetch();
+    }
+
+    public static List<OrderSpecifier<?>> getOrderSpecifiers(PathBuilder<?> entityPath, Sort sort) {
+        List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
+        for (Sort.Order order : sort) {
+            PathBuilder<Object> path = entityPath.get(order.getProperty());
+            orderSpecifiers.add(new OrderSpecifier(Order.valueOf(order.getDirection().name()), path));
+        }
+        return orderSpecifiers;
+    }
+
     public Page<InstitutionalizedEntity> findAll(Pageable pageable, Long id, String name, String cpf, String phone,
                                                  LocalDate birthDay, GenderEnum gender) {
         QInstitutionalizedEntity qInstitutionalized = QInstitutionalizedEntity.institutionalizedEntity;
         Predicate where = this.getWhere(qInstitutionalized, id, name, cpf, phone, birthDay, gender);
         List<InstitutionalizedEntity> list = this.getTuples(pageable, qInstitutionalized, where);
         long totalItems = this.getTotalItems(qInstitutionalized, where);
-
-//        List<InstitutionalizedEntity> items = list.stream().map(tuple -> InstitutionalizedEntity.builder()
-//                .id(tuple.get(qPessoa.id))
-////                .nome(tuple.get(qPessoa.nome))
-////                .cpf(tuple.get(qPessoa.cpf))
-////                .fone1(tuple.get(qPessoa.fone1))
-////                .qualificacao(tuple.get(qPessoa.qualificacao))
-////                .fornecedor(Objects.requireNonNullElse(tuple.get(qPessoa.fornecedor), false))
-////                .cliente(Objects.requireNonNullElse(tuple.get(qPessoa.cliente), false);)
-////                .spc(Objects.requireNonNullElse(tuple.get(qPessoa.spc), false))
-////                .centrodecusto(this.getCentroDeCusto(tuple.get(qPessoa.centrodecusto.id)))
-//                .build()).collect(Collectors.toList());
 
         return new PageImpl<>(list, pageable, totalItems);
     }
@@ -67,7 +75,7 @@ public class InstitutionalizedService {
         query.from(qInstitutionalized);
         query.where(where);
         PathBuilder<InstitutionalizedEntity> entityPath = new PathBuilder<>(InstitutionalizedEntity.class, "institutionalizedEntity");
-        return TupleUtil.getTuples(pageable, query, entityPath);
+        return fetchQuery(pageable, query, entityPath);
     }
 
     private Predicate getWhere(QInstitutionalizedEntity qInstitutionalized, Long id, String name, String cpf,
