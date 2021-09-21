@@ -1,0 +1,48 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="samuel (generated)" id="1632183997154-3">
+        <createSequence incrementBy="1" sequenceName="sequence_medical_record" startValue="1"/>
+    </changeSet>
+    <changeSet author="samuel (generated)" id="1632183997154-4">
+        <createTable tableName="medical_record">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="medical_recordPK"/>
+            </column>
+            <column name="created_by" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_date" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="anamnesis" type="VARCHAR(400)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cid" type="VARCHAR(10)"/>
+            <column name="definitive_diagnosis" type="VARCHAR(200)"/>
+            <column name="diagnostic_hypotheses" type="VARCHAR(200)"/>
+            <column name="infectious_disease_carrier" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="infectious_disease_description" type="VARCHAR(200)"/>
+            <column name="medical_appointment_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reason" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="responsible" type="VARCHAR(100)"/>
+            <column name="institutionalized_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="samuel (generated)" id="1632183997154-5">
+        <addForeignKeyConstraint baseColumnNames="institutionalized_id" baseTableName="medical_record" constraintName="FK1p0e81hmg5wjx66jnk5sb0wc6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="institutionalized" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
