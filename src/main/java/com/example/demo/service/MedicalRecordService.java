@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.InstitutionalizedEntity;
 import com.example.demo.entity.MedicalRecordEntity;
 import com.example.demo.entity.QMedicalRecordEntity;
 import com.example.demo.enumerator.ReasonEnum;
@@ -131,6 +132,10 @@ public class MedicalRecordService {
             throw new RecordsNotFoundException(id);
         }
         medicalRecordRepository.deleteById(id);
+    }
+
+    public MedicalRecordEntity findOne(Long id) {
+        return medicalRecordRepository.findById(id).orElseThrow(() -> new RecordsNotFoundException(id));
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.InstitutionalizedEntity;
 import com.example.demo.entity.MedicalRecordEntity;
 import com.example.demo.enumerator.ReasonEnum;
 import com.example.demo.exception.RecordsNotFoundException;
@@ -44,6 +45,12 @@ public class MedicalRecordController {
     @ResponseStatus(HttpStatus.CREATED)
     public MedicalRecordEntity create(@Valid @RequestBody MedicalRecordEntity institutionalized) {
         return medicalRecordService.create(institutionalized);
+    }
+
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public MedicalRecordEntity findOne(@PathVariable Long id) {
+        return medicalRecordService.findOne(id);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

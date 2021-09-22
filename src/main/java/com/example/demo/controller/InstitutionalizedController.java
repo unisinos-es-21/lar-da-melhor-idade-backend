@@ -46,6 +46,12 @@ public class InstitutionalizedController {
         return institutionalizedService.create(institutionalized);
     }
 
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public InstitutionalizedEntity findOne(@PathVariable Long id) {
+        return institutionalizedService.findOne(id);
+    }
+
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public InstitutionalizedEntity update(@PathVariable Long id, @Valid @RequestBody InstitutionalizedEntity institutionalized) {

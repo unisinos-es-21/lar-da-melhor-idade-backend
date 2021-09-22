@@ -132,4 +132,7 @@ public class InstitutionalizedService {
         institutionalizedRepository.deleteById(id);
     }
 
+    public InstitutionalizedEntity findOne(Long id) {
+        return institutionalizedRepository.findById(id).orElseThrow(() -> new RecordsNotFoundException(id));
+    }
 }
