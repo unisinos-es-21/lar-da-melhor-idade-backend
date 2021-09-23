@@ -12,7 +12,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class AuthService {
 
-//    private final AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
     private final JwtTokenService jwtTokenService;
     private final UserDetailsServiceImpl userDetailsService;
 
@@ -21,7 +21,7 @@ public class AuthService {
         Objects.requireNonNull(username);
         Objects.requireNonNull(password);
 
-//        this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         var userDetails = this.userDetailsService.loadUserByUsername(username);
         String token = this.jwtTokenService.generateToken(userDetails);
         var expirationDate = this.jwtTokenService.getExpirationDateFromToken(token);
