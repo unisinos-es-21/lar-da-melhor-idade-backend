@@ -28,12 +28,13 @@ public class MedicalRecordController {
     @ResponseStatus(HttpStatus.OK)
     public Page<MedicalRecordEntity> findAll(Pageable pageable,
                                              @RequestParam(required = false, value = "id") Long id,
-                                             @RequestParam(required = false, value = "institutionalized") String institutionalized,
+                                             @RequestParam(required = false, value = "institutionalizedName") String institutionalizedName,
+                                             @RequestParam(required = false, value = "institutionalizedId") Long institutionalizedId,
                                              @RequestParam(required = false, value = "medicalAppointmentDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate medicalAppointmentDate,
                                              @RequestParam(required = false, value = "responsible") String responsible,
                                              @RequestParam(required = false, value = "reason") ReasonEnum reason,
                                              @RequestParam(required = false, value = "cid") String cid) {
-        Page<MedicalRecordEntity> page = medicalRecordService.findAll(pageable, id, institutionalized, medicalAppointmentDate, responsible, reason, cid);
+        Page<MedicalRecordEntity> page = medicalRecordService.findAll(pageable, id, institutionalizedName, institutionalizedId, medicalAppointmentDate, responsible, reason, cid);
         if (CollectionUtils.isEmpty(page.getContent())) {
             throw new RecordsNotFoundException();
         } else {

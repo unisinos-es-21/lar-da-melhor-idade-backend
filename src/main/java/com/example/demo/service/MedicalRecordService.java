@@ -56,11 +56,11 @@ public class MedicalRecordService {
         return orderSpecifiers;
     }
 
-    public Page<MedicalRecordEntity> findAll(Pageable pageable, Long id, String institutionalized,
+    public Page<MedicalRecordEntity> findAll(Pageable pageable, Long id, String institutionalizedName, Long institutionalizedId,
                                              LocalDate medicalAppointmentDate, String responsible,
                                              ReasonEnum reason, String cid) {
         QMedicalRecordEntity qMedicalRecord = QMedicalRecordEntity.medicalRecordEntity;
-        Predicate where = this.getWhere(qMedicalRecord, id, institutionalized, medicalAppointmentDate, responsible, reason, cid);
+        Predicate where = this.getWhere(qMedicalRecord, id, institutionalizedName, institutionalizedId, medicalAppointmentDate, responsible, reason, cid);
         List<MedicalRecordEntity> list = this.getTuples(pageable, qMedicalRecord, where);
         long totalItems = this.getTotalItems(qMedicalRecord, where);
         return new PageImpl<>(list, pageable, totalItems);
@@ -82,15 +82,18 @@ public class MedicalRecordService {
         return fetchQuery(pageable, query, entityPath);
     }
 
-    private Predicate getWhere(QMedicalRecordEntity qMedicalRecord, Long id, String institutionalized,
+    private Predicate getWhere(QMedicalRecordEntity qMedicalRecord, Long id, String institutionalizedName, Long institutionalizedId,
                                LocalDate medicalAppointmentDate, String responsible,
                                ReasonEnum reason, String cid) {
         var predicateBuilder = new BooleanBuilder();
         if (Objects.nonNull(id)) {
             predicateBuilder.and(qMedicalRecord.id.eq(id));
         }
-        if (Objects.nonNull(institutionalized)) {
-            predicateBuilder.and(qMedicalRecord.institutionalized.name.containsIgnoreCase(institutionalized));
+        if (Objects.nonNull(institutionalizedId)) {
+            predicateBuilder.and(qMedicalRecord.institutionalized.id.eq(institutionalizedId));
+        }
+        if (Objects.nonNull(institutionalizedName)) {
+            predicateBuilder.and(qMedicalRecord.institutionalized.name.containsIgnoreCase(institutionalizedName));
         }
         if (Objects.nonNull(medicalAppointmentDate)) {
             predicateBuilder.and(qMedicalRecord.medicalAppointmentDate.eq(medicalAppointmentDate));
