@@ -116,7 +116,7 @@ public class InstitutionalizedService {
         if (Objects.isNull(institutionalized.getId())) {
             throw new UpdateEntityIdNullException();
         }
-        if (institutionalizedRepository.existsById(institutionalized.getId())) {
+        if (!institutionalizedRepository.existsById(institutionalized.getId())) {
             throw new RecordsNotFoundException(institutionalized.getId());
         }
         if (!id.equals(institutionalized.getId())) {
@@ -126,7 +126,7 @@ public class InstitutionalizedService {
     }
 
     public void delete(Long id) {
-        if (institutionalizedRepository.existsById(id)) {
+        if (!institutionalizedRepository.existsById(id)) {
             throw new RecordsNotFoundException(id);
         }
         institutionalizedRepository.deleteById(id);

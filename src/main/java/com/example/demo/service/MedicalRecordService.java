@@ -121,7 +121,7 @@ public class MedicalRecordService {
         if (Objects.isNull(medicalRecord.getId())) {
             throw new UpdateEntityIdNullException();
         }
-        if (medicalRecordRepository.existsById(medicalRecord.getId())) {
+        if (!medicalRecordRepository.existsById(medicalRecord.getId())) {
             throw new RecordsNotFoundException(medicalRecord.getId());
         }
         if (!id.equals(medicalRecord.getId())) {
@@ -131,7 +131,7 @@ public class MedicalRecordService {
     }
 
     public void delete(Long id) {
-        if (medicalRecordRepository.existsById(id)) {
+        if (!medicalRecordRepository.existsById(id)) {
             throw new RecordsNotFoundException(id);
         }
         medicalRecordRepository.deleteById(id);
