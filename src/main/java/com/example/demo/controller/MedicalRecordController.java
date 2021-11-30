@@ -42,6 +42,12 @@ public class MedicalRecordController {
         }
     }
 
+    @GetMapping(value = "/findByCpf/{cpf}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public Page<MedicalRecordEntity> findAllMedicalRecordByCpf(Pageable pageable, @PathVariable String cpf) {
+        return medicalRecordService.findAllMedicalRecordByCpf(pageable, cpf);
+    }
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public MedicalRecordEntity create(@Valid @RequestBody MedicalRecordEntity institutionalized) {

@@ -141,4 +141,18 @@ public class MedicalRecordService {
         return medicalRecordRepository.findById(id).orElseThrow(() -> new RecordsNotFoundException(id));
     }
 
+    public Page<MedicalRecordEntity> findAllMedicalRecordByCpf(Pageable pageable, String cpf) {
+        QMedicalRecordEntity qMedicalRecord = QMedicalRecordEntity.medicalRecordEntity;
+        Predicate where = this.getWhere(qMedicalRecord, cpf);
+        List<MedicalRecordEntity> list = this.getTuples(pageable, qMedicalRecord, where);
+        long totalItems = this.getTotalItems(qMedicalRecord, where);
+        return new PageImpl<>(list, pageable, totalItems);
+    }
+
+    private Predicate getWhere(QMedicalRecordEntity qMedicalRecord, String cpf) {
+        var predicateBuilder = new BooleanBuilder();
+        predicateBuilder.and(qMedicalRecord.institutionalized.cpf.eq(cpf));
+        return predicateBuilder.getValue();
+    }
+
 }

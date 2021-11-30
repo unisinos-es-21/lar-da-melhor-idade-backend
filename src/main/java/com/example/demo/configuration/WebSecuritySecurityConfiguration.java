@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecuritySecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private static final String[] URL_ALLOWED_FOR_ALL = {"/auth/authenticate", "/auth/register"};
+    private static final String[] URL_ALLOWED_FOR_ALL = {"/auth/authenticate", "/auth/register", "/medicalRecord/findByCpf/**"};
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtRequestFilter jwtRequestFilter;
